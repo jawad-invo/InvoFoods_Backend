@@ -5,8 +5,16 @@ const BookingController = require('../Controllers/BookingController');
 router.use(bodyParser.urlencoded({ extended: true }));
 
 const validate = require('../Middlewares/BookingValidation');
+const auth = require('../Middlewares/auth');
+const middleware = require('../Middlewares/Booking');
 
-router.post('/create', validate.create, BookingController.create);
+router.post('/create', [
+    validate.create,
+    auth.getToken,
+    auth.verifyToken,
+    // middleware.checkSchedule
+],
+    BookingController.create);
 
 router.post('/get', validate.get, BookingController.getBookingDetails);
 

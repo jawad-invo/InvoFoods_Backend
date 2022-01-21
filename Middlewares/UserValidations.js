@@ -29,9 +29,9 @@ exports.login = [
 ]
 
 exports.updatePassword = [
-    check('id').notEmpty().isNumeric(),
     check('email').notEmpty().isEmail(),
-    check('password').notEmpty().isLength({ min: 6, max: 30 }),
+    check('new_password').notEmpty().isLength({ min: 6, max: 30 }),
+    check('old_password').notEmpty().isLength({ min: 6, max: 30 }),
     (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty())

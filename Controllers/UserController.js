@@ -1,18 +1,24 @@
 const models = require('../models');
 const User = models.User;
 const jwt = require('jsonwebtoken');
+const email = require('../Controllers/EmailController');
 
 
 async function create(req, res) {
     try {
 
-        User.create({
+        await User.create({
             name: req.body.name,
             email: req.body.email,
             password: req.body.password,
             gender: req.body.gender,
-            age: req.body.age
-        }).then(user => res.status(201).send(user));
+            age: req.body.age,
+            verification: email.verificationCode,
+            role: "user"
+        }).then(user => {
+            email.sendEmail(req, res);
+            res.status(201).send(user);
+        });
 
     } catch (error) {
         res.status(500).send(error);
@@ -21,14 +27,21 @@ async function create(req, res) {
 
 async function updatePassword(req, res) {
     try {
-        await User.update({
-            password: req.body.password
+
+        const result = await User.update({
+            password: req.body.new_password
         }, {
             where: {
                 email: req.body.email,
-                id: req.body.id
+                password: req.body.old_password
             }
-        }).then(res.status(200).send(req.authData));
+        }).then((result) => {
+            if (result == 1) {
+                res.status(200).send({ message: "Password updated!" })
+            } else {
+                res.status(403).send({ message: "Password update failed!" })
+            }
+        });
     } catch (error) {
         res.status(500).send(error);
     }
@@ -39,18 +52,19 @@ async function login(req, res) {
         const user = await User.findOne({
             where: {
                 email: req.body.email,
-                password: req.body.password
+                password: req.body.password,
+                verification: null
             }
-        });
-
-        // if (!user) {
-        //     res.status(403).send("Wrong Credentials");
-        // }
-        jwt.sign({ user }, 'secretKey', { expiresIn: '30s' }, (err, token) => {
-            res.json({
-                token,
-                user
-            })
+        }).then(user => {
+            if (user === null) {
+                res.status(403).send({ message: "User not found." });
+            }
+            jwt.sign({ user }, 'secretKey', { expiresIn: '30m' }, (err, token) => {
+                res.json({
+                    token,
+                    user
+                })
+            });
         });
 
     } catch (error) {
@@ -58,10 +72,31 @@ async function login(req, res) {
     }
 }
 
+async function verifyEmail(req, res) {
+    try {
 
+        const result = await User.update({
+            verification: null,
+        }, {
+            where: {
+                email: req.body.email,
+                verification: parseInt(req.body.verification_code)
+            }
+        }).then((result) => {
+            if (result == 1)
+                res.status(200).send({ message: "Verification successfull." })
+            else
+                res.status(200).send({ message: "Verification Failed!" })
+        });
+
+    } catch (error) {
+        res.status(500).send(error);
+    }
+}
 
 module.exports = {
     create,
     updatePassword,
     login,
+    verifyEmail
 };

@@ -23,6 +23,10 @@ async function verifyToken(req, res, next) {
     });
 }
 
+async function isAdmin(req, res, next){
+    
+}
+
 module.exports = {
     getToken,
     verifyToken

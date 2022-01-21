@@ -5,10 +5,11 @@ const scheduleController = require('../Controllers/ScheduleController');
 router.use(bodyParser.urlencoded({ extended: true }));
 
 const validate = require('../Middlewares/ScheduleValidation');
+const auth = require('../Middlewares/auth');
 
 router.post('/create', validate, scheduleController.create);
 
-router.post('/get', scheduleController.get);
+router.post('/get', auth.getToken, auth.verifyToken, scheduleController.get);
 
 router.post('/update', scheduleController.update);
 

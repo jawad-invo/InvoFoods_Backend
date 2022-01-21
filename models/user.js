@@ -2,6 +2,8 @@
 const {
   Model
 } = require('sequelize');
+const PROTECTED_ATTRIBUTES = ['password', 'token']
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -12,13 +14,16 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
+
   }
   User.init({
     name: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     gender: DataTypes.STRING,
-    age: DataTypes.INTEGER
+    age: DataTypes.INTEGER,
+    role: DataTypes.STRING,
+    verification: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'User',
