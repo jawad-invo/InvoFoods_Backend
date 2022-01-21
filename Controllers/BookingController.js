@@ -1,4 +1,3 @@
-
 const req = require('express/lib/request');
 const models = require('../models');
 const BookingModel = models.Booking;
@@ -8,9 +7,9 @@ async function create(req, res) {
     try {
 
         await BookingModel.create({
-            user_id: req.body.id,
-            schedule_id: req.body.id,
-            status: "pending"
+            user_id: req.body.user_id,
+            state: req.body.state,
+            schedule_id: req.body.schedule_id
         }).then(result => res.status(201).send(result));
 
     } catch (error) {
@@ -47,9 +46,10 @@ async function deleteBooking(req, res) {
     try {
         await BookingModel.destroy({
             where: {
+                id: req.body.id,
                 user_id: req.body.user_id
             }
-        })
+        }).then(res.status(200).send({ message: "Booking deleted successfully!" }));
     } catch (error) {
         res.status(500).send(error);
     }

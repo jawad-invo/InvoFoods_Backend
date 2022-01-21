@@ -5,13 +5,26 @@ const bodyParser = require('body-parser');
 const userController = require('../Controllers/UserController');
 router.use(bodyParser.urlencoded({ extended: true }));
 const models = require('../models');
-const User = models.User;
 
-const validate = require('../Middlewares/SignupValidation');
+const validate = require('../Middlewares/UserValidations');
 
-router.post('/signup', validate , userController.create);
+router.post('/signup', [
+    validate.signup,
+],
+    userController.create);
 
-router.post('/login', auth.verifyToken, userController.login);
+router.post('/login', [
+    validate.login
+],
+    userController.login);
+
+router.post('/updatePassword', [
+    validate.updatePassword,
+    auth.getToken,
+    auth.verifyToken,
+]
+    , userController.create);
+
 
 
 

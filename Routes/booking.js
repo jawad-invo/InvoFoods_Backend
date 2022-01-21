@@ -4,12 +4,14 @@ const bodyParser = require('body-parser');
 const BookingController = require('../Controllers/BookingController');
 router.use(bodyParser.urlencoded({ extended: true }));
 
-router.post('/create', validate, BookingController.create);
+const validate = require('../Middlewares/BookingValidation');
 
-router.post('/get', BookingController.getBookingDetails);
+router.post('/create', validate.create, BookingController.create);
+
+router.post('/get', validate.get, BookingController.getBookingDetails);
 
 router.post('/update', BookingController.update);
 
-router.post('/delete', BookingController.deleteBooking);
+router.post('/delete', validate.destroy, BookingController.deleteBooking);
 
 module.exports = router;
