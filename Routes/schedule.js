@@ -7,12 +7,38 @@ router.use(bodyParser.urlencoded({ extended: true }));
 const validate = require('../Middlewares/ScheduleValidation');
 const auth = require('../Middlewares/auth');
 
-router.post('/create', validate.createValidation, scheduleController.create);
+router.post('/create', [
+    validate.createValidation,
+    auth.getToken,
+    auth.verifyToken,
+    auth.verifyUser,
+    auth.isAdmin
+],
+    scheduleController.create);
 
-router.post('/get', auth.getToken, auth.verifyToken, validate.getValidation, scheduleController.get);
+router.post('/get', [
+    auth.getToken,
+    auth.verifyToken,
+    validate.getValidation
+],
+    scheduleController.get);
 
-router.post('/update', [validate.updateValidation], scheduleController.update);
+router.post('/update', [
+    validate.updateValidation,
+    auth.getToken,
+    auth.verifyToken,
+    auth.verifyUser,
+    auth.isAdmin
+],
+    scheduleController.update);
 
-router.post('/delete', [validate.deleteValidation], scheduleController.remove);
+router.post('/delete', [
+    validate.deleteValidation,
+    auth.getToken,
+    auth.verifyToken,
+    auth.verifyUser,
+    auth.isAdmin
+],
+    scheduleController.remove);
 
 module.exports = router;

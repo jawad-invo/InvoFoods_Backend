@@ -1,6 +1,8 @@
 const req = require('express/lib/request');
 const models = require('../models');
 const BookingModel = models.Booking;
+const FlightModel = models.Flight;
+
 
 
 async function create(req, res) {
@@ -8,9 +10,15 @@ async function create(req, res) {
 
         await BookingModel.create({
             user_id: req.body.user_id,
-            state: req.body.state,
             schedule_id: req.body.schedule_id
-        }).then(result => res.status(201).send(result));
+        }).then((result) => {
+            if (result) {
+                // await FlightModel.update({
+                //     seats_left = 
+                // })
+            }
+            res.status(201).send(result)
+        });
 
     } catch (error) {
         res.status(500).send(error);

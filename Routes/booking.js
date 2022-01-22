@@ -6,20 +6,36 @@ router.use(bodyParser.urlencoded({ extended: true }));
 
 const validate = require('../Middlewares/BookingValidation');
 const auth = require('../Middlewares/auth');
-const middleware = require('../Middlewares/Booking');
 
 router.post('/create', [
     validate.create,
     auth.getToken,
     auth.verifyToken,
-    // middleware.checkSchedule
+    auth.verifyUser
 ],
     BookingController.create);
 
-router.post('/get', validate.get, BookingController.getBookingDetails);
+router.post('/get', [
+    validate.get,
+    auth.getToken,
+    auth.verifyToken,
+    auth.verifyUser
+],
+    BookingController.getBookingDetails);
 
-router.post('/update', BookingController.update);
+router.post('/update', [
+    auth.getToken,
+    auth.verifyToken,
+    auth.verifyUser
+],
+    BookingController.update);
 
-router.post('/delete', validate.destroy, BookingController.deleteBooking);
+router.post('/delete', [
+    validate.destroy,
+    auth.getToken,
+    auth.verifyToken,
+    auth.verifyUser
+],
+    BookingController.deleteBooking);
 
 module.exports = router;

@@ -1,11 +1,25 @@
 const models = require('../models');
 const User = models.User;
 const jwt = require('jsonwebtoken');
+
 const email = require('../Controllers/EmailController');
 
+function getRandomNumber() {
+    try {
+        var n = Math.floor(100000 + Math.random() * 900000)
+        n = n.toString().substring(0, 4);
+        n = parseInt(n);
+        verificationCode = n;
+        return n;
+    } catch (error) {
+        res.status(500).send(error);
+    }
+}
 
 async function create(req, res) {
     try {
+
+        const code = getRandomNumber();
 
         await User.create({
             name: req.body.name,
@@ -13,10 +27,12 @@ async function create(req, res) {
             password: req.body.password,
             gender: req.body.gender,
             age: req.body.age,
-            verification: email.verificationCode,
+            verification: code,
             role: "user"
-        }).then(user => {
-            email.sendEmail(req, res);
+        }).then((user) => {
+            if (user !== null) {
+                email.sendEmail(user.email, code);
+            }
             res.status(201).send(user);
         });
 

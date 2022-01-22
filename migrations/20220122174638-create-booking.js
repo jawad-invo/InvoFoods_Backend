@@ -1,35 +1,26 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Schedules', {
+    await queryInterface.createTable('Bookings', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      flight_id: {
+      user_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: "Flights",
+          model: "Users",
           key: "id"
         }
       },
-      take_of_at: {
-        type: Sequelize.DATE
-      },
-      land_in_at: {
-        type: Sequelize.DATE
-      },
-      class_id: {
+      schedule_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: "Classes",
+          model: "Schedules",
           key: "id"
         }
-      },
-      place: {
-        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -41,13 +32,13 @@ module.exports = {
       }
     });
 
-    await queryInterface.addConstraint('Schedules', {
-      fields: ['flight_id', 'take_of_at'],
+    await queryInterface.addConstraint('Bookings', {
+      fields: ['user_id', 'schedule_id'],
       type: 'unique',
     });
+
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Schedules');
+    await queryInterface.dropTable('Bookings');
   }
 };
-

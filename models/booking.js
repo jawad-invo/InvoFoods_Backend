@@ -17,7 +17,6 @@ module.exports = (sequelize, DataTypes) => {
   Booking.init({
     user_id: DataTypes.INTEGER,
     schedule_id: DataTypes.INTEGER,
-    state: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Booking',
