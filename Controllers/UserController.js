@@ -21,7 +21,7 @@ async function create(req, res) {
         });
 
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).send({ message: error.errors[0].message });
     }
 }
 
@@ -53,10 +53,12 @@ async function login(req, res) {
             where: {
                 email: req.body.email,
                 password: req.body.password,
-                verification: null
             }
         }).then(user => {
-            if (user === null) {
+            if (user && user.verification !== null) {
+                res.status(403).send({ message: "Email not verified." });
+            }
+            else if (user === null) {
                 res.status(403).send({ message: "User not found." });
             }
             jwt.sign({ user }, 'secretKey', { expiresIn: '30m' }, (err, token) => {

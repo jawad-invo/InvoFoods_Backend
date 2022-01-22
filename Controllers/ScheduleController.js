@@ -8,13 +8,15 @@ const { now } = require('sequelize/dist/lib/utils');
 async function create(req, res) {
     try {
 
-        ScheduleModel.create({
+        const result = await ScheduleModel.create({
             flight_id: req.body.flight_id,
             take_of_at: req.body.take_of_at,
             land_in_at: req.body.land_in_at,
             class_id: req.body.class_id,
             place: req.body.place,
-        }).then(schedule => res.status(201).send(schedule));
+        }).then((result) => {
+            res.status(201).send(result);
+        });
 
     } catch (error) {
         res.status(500).send(error);
@@ -49,7 +51,12 @@ async function get(req, res) {
             result = await ScheduleModel.findAll({
                 where: { take_of_at: { [Op.gte]: req.body.from, [Op.lte]: now() } },
                 include: associatedModels
-
+            });
+        }
+        else if (req.body.class) {
+            result = await ScheduleModel.findAll({
+                where: { class_id: req.body.class_id },
+                include: associatedModels
             });
         }
         else {

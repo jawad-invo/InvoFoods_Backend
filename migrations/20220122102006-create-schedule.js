@@ -11,7 +11,7 @@ module.exports = {
       flight_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: "flights",
+          model: "Flights",
           key: "id"
         }
       },
@@ -24,7 +24,7 @@ module.exports = {
       class_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: "classes",
+          model: "Classes",
           key: "id"
         }
       },
@@ -40,8 +40,14 @@ module.exports = {
         type: Sequelize.DATE
       }
     });
+
+    await queryInterface.addConstraint('Schedules', {
+      fields: ['flight_id', 'take_of_at'],
+      type: 'unique',
+    });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Schedules');
   }
 };
+
