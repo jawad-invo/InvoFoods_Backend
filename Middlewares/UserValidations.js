@@ -1,7 +1,8 @@
 
 const check = require('express-validator').check;
 const { validationResult } = require("express-validator");
-
+const models = require('../models');
+const User = models.User;
 
 exports.signup = [
     check('name')
@@ -10,10 +11,24 @@ exports.signup = [
         .isString(),
     check('email')
         .notEmpty()
-        .isEmail(),
+        .isEmail()
+        .custom(value => {
+            return User.findOne({where:{email:value}}).then(user => {
+                if (user) {
+                    return Promise.reject('E-mail already in use');
+                }
+            });
+        }),
     check('password')
         .notEmpty()
         .isLength({ min: 6, max: 30 }),
+    check('confirm_password')
+        .custom((value, { req }) => {
+            if (value !== req.body.password) {
+                throw new Error('Password confirmation does not match password');
+            }
+            return true;
+        }),
     check('gender')
         .notEmpty()
         .isIn(['Male', 'Female']),
@@ -40,6 +55,12 @@ exports.updatePassword = [
     check('new_password')
         .notEmpty()
         .isLength({ min: 6, max: 30 }),
+    check('confirm_password').custom((value, { req }) => {
+        if (value !== req.body.password) {
+            throw new Error('Password confirmation does not match password');
+        }
+        return true;
+    }),
     check('old_password')
         .notEmpty()
         .isLength({ min: 6, max: 30 }),
@@ -50,8 +71,8 @@ exports.emailVerification = [
     check('verification_code')
         .notEmpty()
         .isNumeric()
-        .isLength(4).
-        withMessage("Verification code must be of 4 digits"),
+        .isLength(4)
+        .withMessage("Verification code must be of 4 digits"),
     check('email')
         .notEmpty()
         .isEmail(),
@@ -66,7 +87,7 @@ function sendResponse(req, res, next) {
     }
     const extractedErrors = []
     errors.array({ onlyFirstError: true }).map(err => extractedErrors.push({ [err.param]: err.msg }));
-    return res.status(422).json({message: extractedErrors[0]});
+    return res.status(422).json({ message: extractedErrors[0] });
 }
 
 

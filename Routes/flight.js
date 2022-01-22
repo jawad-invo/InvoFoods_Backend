@@ -17,24 +17,27 @@ router.post('/create', [
 ],
     FlightController.create);
 
-router.post('/get', [auth.getToken,
-auth.verifyToken,
-auth.verifyUser,
-auth.isAdmin
+router.post('/get', [
+    auth.getToken,
+    auth.verifyToken,
+    auth.verifyUser,
+    auth.isAdmin
 ],
     FlightController.get);
 
-router.post('/update', [auth.getToken,
-auth.verifyToken,
-auth.verifyUser,
-auth.isAdmin
+router.post('/update', [
+    auth.getToken,
+    auth.verifyToken,
+    auth.verifyUser,
+    auth.isAdmin
 ],
     FlightController.update);
 
-router.post('/delete', [auth.getToken,
-auth.verifyToken,
-auth.verifyUser,
-auth.isAdmin
+router.post('/delete', [
+    auth.getToken,
+    auth.verifyToken,
+    auth.verifyUser,
+    auth.isAdmin
 ],
     FlightController.remove);
 
