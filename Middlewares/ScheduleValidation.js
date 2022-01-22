@@ -15,6 +15,9 @@ exports.createValidation = [
     check('class_id')
         .notEmpty()
         .isNumeric(),
+    check('user_id')
+        .notEmpty()
+        .isNumeric(),
 
     sendResponse
 ];
@@ -45,11 +48,17 @@ exports.updateValidation = [
     check('flight_id')
         .notEmpty()
         .isNumeric(),
+    check('user_id')
+        .notEmpty()
+        .isNumeric(),
     sendResponse
 ];
 
 exports.deleteValidation = [
     check('id')
+        .notEmpty()
+        .isNumeric(),
+    check('user_id')
         .notEmpty()
         .isNumeric(),
     sendResponse

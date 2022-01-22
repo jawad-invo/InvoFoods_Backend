@@ -18,6 +18,9 @@ exports.create = [
     check('class_id')
         .notEmpty()
         .isNumeric(),
+    check('user_id')
+        .notEmpty()
+        .isNumeric(),
     sendResponse
 ];
 

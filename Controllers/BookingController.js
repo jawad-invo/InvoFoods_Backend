@@ -43,6 +43,16 @@ async function getBookingDetails(req, res) {
         await BookingModel.findOne({
             where: {
                 user_id: req.body.user_id
+            },
+            include: {
+                model: models.Schedule,
+                include: [{
+                    model: models.Class,
+                    attributes: ['name']
+                }, {
+                    model: models.Flight,
+                    attributes: ["name", "plane_number", "total_seats", "seats_left"]
+                }]
             }
         }).then(result => res.status(200).send(result))
     } catch (error) {
