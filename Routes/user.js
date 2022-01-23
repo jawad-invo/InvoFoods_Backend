@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require('../Middlewares/auth');
 const bodyParser = require('body-parser');
 const userController = require('../Controllers/UserController');
+
 router.use(bodyParser.urlencoded({ extended: true }));
 const validate = require('../Middlewares/UserValidations');
 
