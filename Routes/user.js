@@ -7,6 +7,12 @@ const userController = require('../Controllers/UserController');
 router.use(bodyParser.urlencoded({ extended: true }));
 const validate = require('../Middlewares/UserValidations');
 
+var fs = require('fs');
+const csv = require('csv-parser');
+const { now } = require('sequelize/dist/lib/utils');
+var flights = [];
+
+
 router.post('/signup', [
     validate.signup
 ],
@@ -30,6 +36,26 @@ router.post('/updatePassword', [
     , userController.updatePassword);
 
 
+router.post('/test', (req, res) => {
+    var flights = [];
+    fs.createReadStream('flights.csv')
+      .pipe(csv())
+      .on('data', function (row) {
+        const flight = {
+          name: row.name,
+          plane_number: parseInt(row.plane_number),
+          total_seats: parseInt(row.total_seats),
+          seats_left: parseInt(row.seats_left),
+          class_id: 1,
+          createdAt: now(),
+          updatedAt: now()
+        }
+        flights.push(flight);
+      }).on('end', function () {
+          res.json(flights);
+        // queryInterface.bulkInsert('flights', flights, {});
+      })
+})
 
 
 module.exports = router;

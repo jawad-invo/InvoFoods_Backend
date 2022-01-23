@@ -1,0 +1,10 @@
+name,plane_number,total_seats,seats_left,class_id
+plane_A,12341,100,100,1
+plane_B,12324,140,140,2
+plane_C,13234,120,120,3
+plane_D,14234,80,80,1
+plane_E,15234,200,200,2
+plane_F,12634,300,300,3
+plane_G,12734,60,60,1
+plane_H,12834,75,75,2
+plane_I,12934,175,175,3
