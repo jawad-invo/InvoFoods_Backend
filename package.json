@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/jawad-invo/airport#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "csv-parse": "^5.0.4",
     "csv-parser": "^3.0.0",

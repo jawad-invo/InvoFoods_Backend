@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const models = require('../models');
 const User = models.User;
+const bcrypt = require('bcryptjs');
 
 
 
@@ -52,12 +53,32 @@ async function isAdmin(req, res, next) {
         }
         next();
     });
+}
 
+async function updatePassword(req, res, next) {
+    const user = await User.findOne({
+        where: {
+            email: req.body.email,
+        }
+    }).then(user => {
+        if (user === null)
+            res.status(403).send({ message: "User not found." });
+
+        // Compare hashed password from DB and from Request
+        bcrypt.compare(req.body.old_password, user.password, function (err, result) {
+            if (result == true)
+                next();
+            else
+                res.status(403).send({ message: "Password does not match" })
+        });
+
+    })
 }
 
 module.exports = {
     getToken,
     verifyToken,
     verifyUser,
-    isAdmin
+    isAdmin,
+    updatePassword
 }

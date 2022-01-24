@@ -32,6 +32,7 @@ router.post('/updatePassword', [
     validate.updatePassword,
     auth.getToken,
     auth.verifyToken,
+    auth.updatePassword
 ]
     , userController.updatePassword);
 

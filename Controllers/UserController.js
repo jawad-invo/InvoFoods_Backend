@@ -1,6 +1,7 @@
 const models = require('../models');
 const User = models.User;
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 const email = require('../Controllers/EmailController');
 
@@ -20,11 +21,12 @@ async function create(req, res) {
     try {
 
         const code = getRandomNumber();
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-        await User.create({
+        User.create({
             name: req.body.name,
             email: req.body.email,
-            password: req.body.password,
+            password: hashedPassword,
             gender: req.body.gender,
             age: req.body.age,
             verification: code,
@@ -37,19 +39,18 @@ async function create(req, res) {
         });
 
     } catch (error) {
-        res.status(500).send({ message: error.errors[0].message });
+        res.status(500).send({ message: error.errors });
     }
 }
 
 async function updatePassword(req, res) {
     try {
 
-        const result = await User.update({
-            password: req.body.new_password
+        User.update({
+            password: await bcrypt.hash(req.body.new_password, 10)
         }, {
             where: {
                 email: req.body.email,
-                password: req.body.old_password
             }
         }).then((result) => {
             if (result == 1) {
@@ -58,6 +59,7 @@ async function updatePassword(req, res) {
                 res.status(403).send({ message: "Password update failed!" })
             }
         });
+
     } catch (error) {
         res.status(500).send(error);
     }
@@ -68,20 +70,26 @@ async function login(req, res) {
         const user = await User.findOne({
             where: {
                 email: req.body.email,
-                password: req.body.password,
             }
         }).then(user => {
-            if (user && user.verification !== null) {
-                res.status(403).send({ message: "Email not verified." });
-            }
-            else if (user === null) {
+
+            if (user === null) {
                 res.status(403).send({ message: "User not found." });
             }
-            jwt.sign({ user }, 'secretKey', { expiresIn: '30m' }, (err, token) => {
-                res.json({
-                    token,
-                    user
-                })
+            // Load hash from your password DB.
+            bcrypt.compare(req.body.password, user.password, function (err, result) {
+                if (result === true) {
+                    if (user && user.verification !== null) {
+                        res.status(403).send({ message: "Email not verified." });
+                    }
+
+                    jwt.sign({ user }, 'secretKey', { expiresIn: '30m' }, (err, token) => {
+                        res.json({
+                            token,
+                            user
+                        })
+                    });
+                }
             });
         });
 
