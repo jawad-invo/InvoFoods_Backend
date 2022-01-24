@@ -37,4 +37,6 @@ app.listen(port, () =>
   console.log(`Express is listening at http://127.0.0.1:${port}`)
 );
 
-module.exports = userRoutes, scheduleRoutes, bookingRoutes;
+module.exports = userRoutes;
+module.exports = scheduleRoutes;
+module.exports = bookingRoutes;
