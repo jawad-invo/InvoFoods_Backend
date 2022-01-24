@@ -73,9 +73,6 @@ async function login(req, res) {
             }
         }).then(user => {
 
-            if (user === null) {
-                res.status(403).send({ message: "User not found." });
-            }
             // Load hash from your password DB.
             bcrypt.compare(req.body.password, user.password, function (err, result) {
                 if (result === true) {
@@ -89,6 +86,8 @@ async function login(req, res) {
                             user
                         })
                     });
+                } else if (user == null || result == false) {
+                    res.status(403).send({ message: "User not found." });
                 }
             });
         });

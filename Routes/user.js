@@ -54,7 +54,6 @@ router.post('/test', (req, res) => {
         flights.push(flight);
       }).on('end', function () {
           res.json(flights);
-        // queryInterface.bulkInsert('flights', flights, {});
       })
 })
 
