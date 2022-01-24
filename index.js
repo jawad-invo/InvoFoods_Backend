@@ -11,7 +11,8 @@ const app = express();
 const port = 8080;
 
 const swaggerOptions = {
-  swaggerDefinition: {
+  definition: {
+    openapi: '3.0.0',
     info: {
       title: 'Flight Management System APIs',
       description:

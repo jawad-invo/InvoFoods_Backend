@@ -14,41 +14,165 @@ const validate = require('../Middlewares/UserValidations');
 
 /**
  * @swagger
- *  components:
- *      schema:
- *          User:
- *              type: object
- *              properties:
- *                  message:
- *                          type: string
- *                  user:
- *                          type: object
+ * tags:
+ *   name: User
+ *   description: APIs for user functionalities
  */
 
 /**
  * @swagger
- * /signup:
+ *  components:
+ *     schemas:
+ *          User:
+ *              type: object
+ *              required:
+ *                - name
+ *                - email
+ *                - password
+ *                - age
+ *                - gender
+ *              properties:
+ *                  id:
+ *                     type: integer
+ *                  name:
+ *                      type: string
+ *                  email:
+ *                      type: string
+ *                  password:
+ *                      type: string
+ *                  age:
+ *                      type: integer
+ *                  verification:
+ *                      type: integer
+ *                  gender:
+ *                      type: string
+ *                  role:
+ *                      type: string
+ *              example:
+ *                  id: 1
+ *                  name: Jawad
+ *                  email: Jawad@gmail.com
+ *                  password: 1234567
+ *                  gender: Male
+ *                  age: 24
+ *                  verification: 1234
+ *                  role: user
+ */
+
+/**
+ * @swagger
+ * /api/user/signup:
  *  post:
  *      Summary: To register a new user in the system.
+ *      tags:
+ *        - User
  *      Description: The API get data from user and create its entry in the database.
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/User'
  *      responses:
  *           200:
  *              description: Signup successfull. Verify email to proceed.
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/PetForm'
  */
 
 router.post('/signup', [validate.signup], userController.create);
 
+/**
+ * @swagger
+ *  components:
+ *      Login:
+ *          example:
+ *              email: Jawad@gmail.com
+ *              password: 1234567
+ */
+
+/**
+ * @swagger
+ * /api/user/login:
+ *  post:
+ *      Summary: To login a user into the system.
+ *      tags:
+ *        - User
+ *      Description: The API log in a user into the system and assign JWT token to it.
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/Login'
+ *      responses:
+ *           200:
+ *              description: JWT token is returned along with user data.
+ */
+
 router.post('/login', [validate.login], userController.login);
+
+/**
+ * @swagger
+ *  components:
+ *      Verify:
+ *          example:
+ *              email: Jawad@gmail.com
+ *              verification_code: 1234
+ */
+
+/**
+ * @swagger
+ * /api/user/verify:
+ *  post:
+ *      Summary: To verify the OTP from the email.
+ *      tags:
+ *        - User
+ *      Description: The API verify the email using OTP.
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/Verify'
+ *      responses:
+ *           200:
+ *              description: Verification Successfull.
+ */
 
 router.post(
   '/verify',
   [validate.emailVerification],
   userController.verifyEmail
 );
+
+/**
+ * @swagger
+ *  components:
+ *      UpdatePassword:
+ *          example:
+ *              email: Jawad@gmail.com
+ *              old_password: 123456
+ *              new_password: 654321
+ *              confirm_new_password: 654321
+ */
+
+/**
+ * @swagger
+ * /api/user/updatePassword:
+ *  post:
+ *      Summary: To Update the password of the user.
+ *      tags:
+ *        - User
+ *      Description: The API update the password of the user.
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/UpdatePassword'
+ *      responses:
+ *           200:
+ *              description: Password Updated.
+ */
 
 router.post(
   '/updatePassword',
