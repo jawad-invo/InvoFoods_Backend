@@ -12,6 +12,34 @@ const auth = require('../Middlewares/auth');
 const userController = require('../Controllers/UserController');
 const validate = require('../Middlewares/UserValidations');
 
+/**
+ * @swagger
+ *  components:
+ *      schema:
+ *          User:
+ *              type: object
+ *              properties:
+ *                  message:
+ *                          type: string
+ *                  user:
+ *                          type: object
+ */
+
+/**
+ * @swagger
+ * /signup:
+ *  post:
+ *      Summary: To register a new user in the system.
+ *      Description: The API get data from user and create its entry in the database.
+ *      responses:
+ *           200:
+ *              description: Signup successfull. Verify email to proceed.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/PetForm'
+ */
+
 router.post('/signup', [validate.signup], userController.create);
 
 router.post('/login', [validate.login], userController.login);
