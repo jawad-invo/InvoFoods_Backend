@@ -1,6 +1,6 @@
 'use strict';
 const {
-  Model, INTEGER, STRING
+  Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Schedule extends Model {
@@ -17,33 +17,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Schedule.init({
-    flight_id: {
-      type: INTEGER,
-      allowNull: false,
-      notEmpty: true,
-    },
-    take_of_at: {
-      type: Date,
-      allowNull: false,
-      notEmpty: true,
-    },
-    land_in_at: {
-      type: Date,
-      allowNull: false,
-      notEmpty: true,
-    },
-    class_id: {
-      type: STRING,
-      allowNull: false,
-      notEmpty: true,
-    },
-    place: {
-      type: STRING,
-      allowNull: false,
-      notEmpty: true,
-      min: 2,
-      max: 30
-    },
+    flight_id: DataTypes.INTEGER,
+    take_of_at: DataTypes.DATE,
+    land_in_at: DataTypes.DATE,
+    class_id: DataTypes.INTEGER,
+    place: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Schedule',
