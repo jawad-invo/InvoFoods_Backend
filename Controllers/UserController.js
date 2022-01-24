@@ -35,7 +35,10 @@ async function create(req, res) {
             if (user !== null) {
                 email.sendEmail(user.email, code);
             }
-            res.status(201).send(user);
+            res.status(201).send({
+                message: "Signup successfull. Verify email to proceed.",
+                user
+            });
         });
 
     } catch (error) {
