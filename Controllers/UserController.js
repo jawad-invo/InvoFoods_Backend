@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 
 const email = require('../Controllers/EmailController');
 
-function getRandomNumber() {
+async function getRandomNumber() {
     try {
         var n = Math.floor(100000 + Math.random() * 900000)
         n = n.toString().substring(0, 4);
@@ -20,7 +20,7 @@ function getRandomNumber() {
 async function create(req, res) {
     try {
 
-        const code = getRandomNumber();
+        const code = await getRandomNumber();
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
         User.create({
@@ -78,7 +78,7 @@ async function login(req, res) {
 
             // Load hash from your password DB.
             bcrypt.compare(req.body.password, user.password, function (err, result) {
-                if (result === true) {
+                if (result == true) {
                     if (user && user.verification !== null) {
                         res.status(403).send({ message: "Email not verified." });
                     }
