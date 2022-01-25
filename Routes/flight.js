@@ -44,7 +44,7 @@ const auth = require('../Middlewares/auth');
  * @swagger
  * tags:
  *   name: Planes
- *   description: APIs for flight schedules
+ *   description: APIs for planes management
  */
 
 /**
