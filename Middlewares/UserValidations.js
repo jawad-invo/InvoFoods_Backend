@@ -1,8 +1,11 @@
 const { check } = require('express-validator');
 const { validationResult } = require('express-validator');
+
 const models = require('../models');
 
 const { User } = models;
+
+
 
 function sendResponse(req, res, next) {
   const errors = validationResult(req);
@@ -24,7 +27,6 @@ exports.signup = [
     .custom((value) =>
       User.findOne({ where: { email: value } }).then((user) => {
         if (user) {
-          // eslint-disable-next-line prefer-promise-reject-errors
           return Promise.reject('E-mail already in use');
         }
         return true;
@@ -37,8 +39,6 @@ exports.signup = [
     }
     return true;
   }),
-  check('gender').notEmpty().isIn(['Male', 'Female']),
-  check('age').notEmpty().isNumeric().isLength({ min: 1, max: 3 }),
   sendResponse,
 ];
 

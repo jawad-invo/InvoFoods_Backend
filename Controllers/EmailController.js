@@ -1,8 +1,6 @@
 const res = require('express/lib/response');
 const nodeMailer = require('nodemailer');
 
-let verificationCode;
-
 const transporter = nodeMailer.createTransport({
   service: 'gmail',
   secure: true,
@@ -12,13 +10,13 @@ const transporter = nodeMailer.createTransport({
   },
 });
 
-async function sendEmail(email, code) {
+async function sendEmail(email, total_meals, total_amount) {
   try {
     const emailOptions = {
       form: 'jawad.akhtar@invzone.com',
       to: email,
-      subject: 'Verification Code',
-      text: `Hi! Your verification code is: ${code}`,
+      subject: 'Invoice',
+      text: `Hi! Here is the invoice. Total meals: ${total_meals}. Total amount to pay: ${total_amount}`,
     };
 
     transporter.sendMail(emailOptions, (error, info) => {
@@ -33,6 +31,5 @@ async function sendEmail(email, code) {
 }
 
 module.exports = {
-  sendEmail,
-  verificationCode,
+  sendEmail
 };

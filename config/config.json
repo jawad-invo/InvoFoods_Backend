@@ -2,7 +2,7 @@
   "development": {
     "username": "postgres",
     "password": null,
-    "database": "airport",
+    "database": "food",
     "host": "localhost",
     "dialect": "postgres"
   },

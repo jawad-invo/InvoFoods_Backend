@@ -1,43 +1,29 @@
 const express = require('express');
-
-const swaggerJSDoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
 const userRoutes = require('./Routes/user');
-const scheduleRoutes = require('./Routes/schedule');
-const bookingRoutes = require('./Routes/booking');
-const flightRoutes = require('./Routes/flight');
+const menuRoutes = require('./Routes/menu');
+const subscriberRoutes = require('./Routes/subscriber');
+const mealRoutes = require('./Routes/meal');
+
+const bodyParser = require('body-parser');
+const fileUpload = require('express-fileupload');
 
 const app = express();
 const port = 8080;
 
-const swaggerOptions = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'Flight Management System APIs',
-      description:
-        'This documentation define the APIs Documentation for the system.',
-      contact: {
-        name: 'jawadakhter7@gmail.com',
-      },
-      servers: ['http://localhost:8080'],
-    },
-  },
-  apis: ['./routes/*.js'],
-};
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-const swaggerDocs = swaggerJSDoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use(fileUpload());
 
 app.use('/api/user', userRoutes);
-app.use('/api/schedule', scheduleRoutes);
-app.use('/api/booking', bookingRoutes);
-app.use('/api/flight', flightRoutes);
+app.use('/api/menu', menuRoutes);
+app.use('/api/subscriber', subscriberRoutes);
+app.use('/api/meal', mealRoutes);
+
+
 
 app.listen(port, () =>
   console.log(`Express is listening at http://127.0.0.1:${port}`)
 );
 
-module.exports = userRoutes;
-module.exports = scheduleRoutes;
-module.exports = bookingRoutes;
+module.exports = userRoutes, menuRoutes;
