@@ -3,12 +3,15 @@ const userRoutes = require('./Routes/user');
 const menuRoutes = require('./Routes/menu');
 const subscriberRoutes = require('./Routes/subscriber');
 const mealRoutes = require('./Routes/meal');
+var cors = require('cors')
 
 const bodyParser = require('body-parser');
 const fileUpload = require('express-fileupload');
 
 const app = express();
 const port = 8080;
+
+app.use(cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,6 +22,8 @@ app.use('/api/user', userRoutes);
 app.use('/api/menu', menuRoutes);
 app.use('/api/subscriber', subscriberRoutes);
 app.use('/api/meal', mealRoutes);
+
+
 
 
 

@@ -13,7 +13,7 @@ async function create(req, res) {
         }).then((subscribers) => {
             if (subscribers != null) {
                 // Cron Job that will dispatch at the end of the subscribed period
-                job.sendInvoice(user_id, req.body.email, package_name);
+                job.sendInvoice(req.body.user_id, req.body.package_name, req.body.email);
             }
             res.status(201).send({
                 message: 'Menu created',
