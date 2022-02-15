@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const models = require('../models');
 
-const { User } = models;
+const { User, Subscriber } = models;
 const email = require('./EmailController');
 
 async function create(req, res) {
@@ -54,6 +54,7 @@ async function login(req, res) {
             where: {
                 email: req.body.email,
             },
+            include: Subscriber
         }).then((user) => {
             // Load hash from your password DB.
             bcrypt.compare(req.body.password, user.password, (err, result) => {

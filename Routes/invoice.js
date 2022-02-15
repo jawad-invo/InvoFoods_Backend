@@ -6,5 +6,7 @@ router.post('/create', invoiceController.create);
 router.post('/get', invoiceController.get);
 router.post('/update', invoiceController.update);
 router.post('/delete', invoiceController.destroy);
+router.post('/upload', invoiceController.uploadFile);
+
 
 module.exports = router;

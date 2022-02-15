@@ -11,10 +11,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.hasMany(models.User, { foreignKey: 'id' });
     }
   }
   Subscriber.init({
-    user_id: DataTypes.INTEGER,
+    user_id: {
+      type: DataTypes.INTEGER,
+      references: 'users',
+      referencesKey: 'id'
+    },
     menu_id: DataTypes.INTEGER,
     package_name: DataTypes.STRING
   }, {

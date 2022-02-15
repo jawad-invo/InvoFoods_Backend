@@ -42,9 +42,21 @@ async function create(req, res) {
 async function get(req, res) {
     try {
 
-        await Meal.findAll().then((result) =>
-            res.status(200).send(result)
-        );
+        if (req.body.user_id) {
+            await Meal.findAll({
+
+                where: {
+                    user_id: req.body.user_id
+                }
+            }).then((result) =>
+                res.status(200).send(result)
+            );
+        } else {
+            await Meal.findAll({}).then((result) =>
+                res.status(200).send(result)
+            );
+        }
+
 
     } catch (error) {
         res.status(500).send(error);
